@@ -104,6 +104,10 @@ namespace story {
             return this.state !== BubbleState.Stopped && this.state !== BubbleState.Paused;
         }
 
+        isDone() {
+            return this.state === BubbleState.Stopped;
+        }
+
         __drawCore(camera: scene.Camera) {
             const page = this.currentPage;
             if (!page) return;

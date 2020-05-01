@@ -9,7 +9,8 @@
         "README.md",
         "api.ts",
         "message.ts",
-        "script.ts"
+        "script.ts",
+        "sequence.ts"
     ],
     "testFiles": [
         "test.ts"
