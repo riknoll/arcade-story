@@ -2,7 +2,8 @@
     "name": "story",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "arcade-tilemap-a-star": "github:jwunderl/arcade-tilemap-a-star#v0.1.6"
     },
     "files": [
         "main.ts",
@@ -10,7 +11,8 @@
         "api.ts",
         "message.ts",
         "script.ts",
-        "sequence.ts"
+        "sequence.ts",
+        "move.ts"
     ],
     "testFiles": [
         "test.ts"
