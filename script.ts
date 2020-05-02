@@ -119,6 +119,6 @@ namespace story {
         bubble.backgroundColor = script.backgroundColor;
         bubble.pagePauseLength = script.pagePauseMillis;
         bubble.startMessage(script.pages);
-        _trackBubble(bubble);
+        _trackTask(bubble);
     }
 }

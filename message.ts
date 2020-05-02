@@ -56,7 +56,7 @@ namespace story {
         Paused
     }
 
-    export class Bubble extends sprites.BaseSprite {
+    export class Bubble extends sprites.BaseSprite implements Task {
         protected anchor: Sprite;
         protected cx: number;
         protected cy: number;

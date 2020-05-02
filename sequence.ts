@@ -3,26 +3,26 @@ namespace story {
     export class StoryState {
         queue: (() => void)[];
         running: boolean;
-        protected activeBubbles: Bubble[];
+        protected activeTasks: Task[];
 
         constructor() {
-            this.activeBubbles = [];
+            this.activeTasks = [];
             this.queue = [];
             this.running = false;
         }
 
-        addBubble(bubble: Bubble) {
+        trackTask(task: Task) {
             if (this.queue.length)
-                this.activeBubbles.push(bubble);
+                this.activeTasks.push(task);
         }
 
         reset() {
-            this.activeBubbles = [];
+            this.activeTasks = [];
             this.running = false;
         }
 
         shouldAdvance() {
-            return !this.activeBubbles.some(bubble => !bubble.isDone());
+            return !this.activeTasks.some(task => !task.isDone());
         }
     }
 
@@ -35,9 +35,9 @@ namespace story {
         state.queue.push(cb);
     }
 
-    export function _trackBubble(bubble: Bubble) {
+    export function _trackTask(task: Task) {
         if (state && state.queue.length) {
-            state.addBubble(bubble);
+            state.trackTask(task);
         }
     }
 
