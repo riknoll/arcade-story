@@ -72,12 +72,36 @@ namespace story {
     }
 
     //% blockId=story_create_script
-    //% block="create script"
+    //% block="create empty script"
+    //% blockSetVariable=script
+    //% weight=98
+    //% group="Script"
+    export function createEmptyScript(): Script {
+        const script = new Script();
+        return script;
+    }
+
+    
+
+    //% blockId=story_create_script_arguments
+    //% block="create script $text with text color $foreground back color $background"
+    //% text.defl=":)"
+    //% foreground.shadow=colorindexpicker
+    //% foreground.defl=15
+    //% background.shadow=colorindexpicker
+    //% background.defl=1
     //% blockSetVariable=script
     //% weight=99
     //% group="Script"
-    export function createScript(): Script {
-        return new Script();
+    export function createScript(text: string, foreground: number, background: number): Script {
+        const script = new Script();
+        
+        if (text) {
+            script.addLineToCurrentPage(text, TextSpeed.Normal);
+        }
+
+        script.setColors(foreground, background);
+        return script;
     }
 
     //% blockId=story_print_script

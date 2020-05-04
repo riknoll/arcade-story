@@ -1,8 +1,9 @@
 namespace story {
-    let state: StoryState;
+    let stateStack: StoryState[];
     export class StoryState {
         queue: (() => void)[];
         running: boolean;
+        lock: boolean;
         protected activeTasks: Task[];
 
         constructor() {
@@ -32,23 +33,38 @@ namespace story {
     //% handlerStatement=1
     export function queueStoryPart(cb: () => void) {
         init();
-        state.queue.push(cb);
+        stateStack[stateStack.length - 1].queue.push(cb);
     }
 
     export function _trackTask(task: Task) {
+        const state = stateStack && stateStack[stateStack.length - 1];
         if (state && state.queue.length) {
             state.trackTask(task);
         }
     }
 
     function init() {
-        if (state) return;
+        if (stateStack) return;
 
-        state = new StoryState();
+        stateStack = [new StoryState()];
+
         let lock = false;
 
-        game.onUpdate(function () {
-            if (lock) return;
+        game.addScenePushHandler(function () {
+            stateStack.push(new StoryState());
+        });
+
+        game.addScenePopHandler(function() {
+            stateStack.pop();
+
+            if (stateStack.length === 0) {
+                stateStack.push(new StoryState());
+            }
+        });
+
+        game.onUpdate(function() {
+            const state = stateStack[stateStack.length - 1];
+            if (state.lock) return;
             if (state.queue.length) {
                 if (state.shouldAdvance() || !state.running) {
                     if (state.running) {
@@ -59,13 +75,13 @@ namespace story {
                     if (state.queue.length) {
                         state.running = true;
                         control.runInParallel(function () {
-                            lock = true;
+                            state.lock = true;
                             state.queue[0]();
-                            lock = false;
+                            state.lock = false;
                         });
                     }
                 }
             }
-        })
+        });
     }
 }
