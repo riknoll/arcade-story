@@ -4,7 +4,7 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "arcade-tilemap-a-star": "github:jwunderl/arcade-tilemap-a-star#v0.1.6"
+        "arcade-tilemap-a-star": "github:jwunderl/arcade-tilemap-a-star#v0.1.7"
     },
     "files": [
         "main.ts",
