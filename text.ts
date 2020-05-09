@@ -20,6 +20,8 @@ namespace story {
     //% blockId=story_sprite_say_text
     //% block="$sprite say $text ||with text color $foreground back color $background $speed"
     //% text.defl=":)"
+    //% sprite.shadow=variables_get
+    //% sprite.defl=sprite
     //% foreground.shadow=colorindexpicker
     //% foreground.defl=15
     //% background.shadow=colorindexpicker
