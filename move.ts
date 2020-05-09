@@ -1,12 +1,4 @@
 namespace story {
-    class MoveTask implements Task {
-        constructor(public movingSprite: Sprite, public target: tiles.Location) {
-        }
-
-        isDone() {
-            return calculateDistance(this.movingSprite, this.target.x, this.target.y) < 2;
-        }
-    }
 
     //% blockId=story_sprite_move_to_tile
     //% block="$sprite move to $location with speed $speed"
@@ -20,9 +12,15 @@ namespace story {
         const start = tiles.getTileLocation(sprite.x >> game.currentScene().tileMap.scale, sprite.y >> game.currentScene().tileMap.scale)
         
         if (start) {
+            let done = false;
+            let task = {
+                isDone: () => done
+            };
             const path = scene.aStar(start, location);
-            scene.followPath(sprite, path, speed);
-            _trackTask(new MoveTask(sprite, location));
+            scene._followPath(sprite, path, speed, () => {
+                done = true;
+            });
+            _trackTask(task);
         }
         else if (location) {
             spriteMoveToLocation(sprite, location.x, location.y, speed);

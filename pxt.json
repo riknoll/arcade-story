@@ -14,7 +14,8 @@
         "script.ts",
         "sequence.ts",
         "move.ts",
-        "scene.ts"
+        "scene.ts",
+        "text.ts"
     ],
     "testFiles": [
         "test.ts"
