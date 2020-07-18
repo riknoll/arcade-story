@@ -23,4 +23,25 @@ namespace story {
         popScene();
         pushScene();
     }
+
+    //% blockId="story_clear_all_text"
+    //% block="clear all text"
+    //% group="Scene"
+    export function clearAllText() {
+        for (const bubble of getAllBubbles()) {
+            bubble.destroy();
+        }
+    }
+
+    export function getAllBubbles() {
+        const all: Bubble[] = [];
+
+        for (const sprite of game.currentScene().allSprites) {
+            if (sprite instanceof Bubble) {
+                all.push(sprite);
+            } 
+        }
+
+        return all;
+    }
 }

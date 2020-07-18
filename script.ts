@@ -113,9 +113,15 @@ namespace story {
     //% inlineInputMode=inline
     //% blockGap=8
     //% group="Script"
-    export function printScript(script: Script, x: number, y: number, z: number) {
+    export function printScript(script: Script, x: number, y: number, z: number, align = false) {
         const b = new Bubble();
-        b.setAnchor(x, y);
+
+        if (align) {
+            b.setAlign(x, y);
+        }
+        else {
+            b.setAnchor(x, y);
+        }
         b.z = z;
 
         startScript(script, b);

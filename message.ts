@@ -81,6 +81,8 @@ namespace story {
         protected state: BubbleState;
 
         protected centered: boolean;
+        protected leftAlign: number;
+        protected topAlign: number;
 
         constructor(z = 1) {
             super(z);
@@ -108,6 +110,11 @@ namespace story {
             return this.state === BubbleState.Stopped;
         }
 
+        setAlign(left: number, top: number) {
+            this.leftAlign = left;
+            this.topAlign = top;
+        }
+
         __drawCore(camera: scene.Camera) {
             const page = this.currentPage;
             if (!page) return;
@@ -128,27 +135,40 @@ namespace story {
             height += this.padding << 1
             width += this.padding << 1
 
-            let left = this.cx - (width >> 1) - camera.drawOffsetX;
-            let top = this.cy - (height >> 1) - camera.drawOffsetY;
+            let left: number ;
+            let top: number;
 
-            if (left + width > screen.width) {
-                left = screen.width - width;
+            if (this.leftAlign) {
+                left = this.leftAlign + this.padding;
             }
-            else if (left < 0) {
-                left = 0
-            }
+            else {
+                left = this.cx - (width >> 1) - camera.drawOffsetX
 
-            if (lines.length > 1) {
-                for (i = 0; i < lines.length - 1; i++) {
-                    top -= lines[i].height >> 1;
+                if (left + width > screen.width) {
+                    left = screen.width - width;
+                }
+                else if (left < 0) {
+                    left = 0
                 }
             }
 
-            if (top + height > screen.height) {
-                top = screen.height - height;
+            if (this.topAlign) {
+                top = this.topAlign + this.padding;
             }
-            else if (top < 0) {
-                top = 0
+            else {
+                top = this.cy - (height >> 1) - camera.drawOffsetY
+                if (lines.length > 1) {
+                    for (i = 0; i < lines.length - 1; i++) {
+                        top -= lines[i].height >> 1;
+                    }
+                }
+
+                if (top + height > screen.height) {
+                    top = screen.height - height;
+                }
+                else if (top < 0) {
+                    top = 0
+                }
             }
 
             screen.fillRect(left, top, width, height, this.backgroundColor);

@@ -87,4 +87,26 @@ namespace story {
 
         return script;
     }
+
+
+    //% blockId=story_print_dialog
+    //% block="print dialog $text at x $x y $y width $width height $height||with text color $foreground back color $background $speed"
+    //% text.defl=":)"
+    //% foreground.shadow=colorindexpicker
+    //% foreground.defl=15
+    //% background.shadow=colorindexpicker
+    //% background.defl=1
+    //% x.defl=80
+    //% y.defl=90
+    //% width.defl=150
+    //% height.defl=50
+    //% inlineInputMode=inline
+    //% weight=60
+    //% group="Text"
+    export function printDialog(text: string, x: number, y: number, height: number, width: number, foreground = 15, background = 1, speed?: TextSpeed) {
+        const font = image.getFontForText(text);
+        const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed, Math.idiv(width - 8, font.charWidth), Math.idiv(height - 8, font.charHeight));
+        script.setColors(foreground, background);
+        printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true);
+    }
 }
