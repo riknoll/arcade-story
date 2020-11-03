@@ -1,6 +1,6 @@
 namespace story {
     export const TEXT_Z = scene.HUD_Z - 1;
-    
+
     //% blockId=story_show_text
     //% block="print $text at x $x y $y||with text color $foreground back color $background $speed"
     //% text.defl=":)"
@@ -36,58 +36,70 @@ namespace story {
     }
 
     function isBreakCharacter(charCode: number) {
-        return charCode <= 47 ||
+        return charCode <= 32 ||
             (charCode >= 58 && charCode <= 64) ||
             (charCode >= 91 && charCode <= 96) ||
             (charCode >= 123 && charCode <= 126);
     }
 
-
-    function formatText(text: string, speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
-        const script = new Script();
+    function formatText(text: string, , speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
+        const result = new Script();
 
         let lastBreakLocation = 0;
         let lastBreak = 0;
         let line = 0;
 
+        function nextLine() {
+            line++;
+        }
+
         for (let index = 0; index < text.length; index++) {
-            if (isBreakCharacter(text.charCodeAt(index))) {
+            if (text.charAt(index) === "\n") {
+                result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), speed);
+                index++;
+                lastBreak = index;
+                nextLine();
+            }
+            // Handle \\n in addition to \n because that's how it gets converted from blocks
+            else if (text.charAt(index) === "\\" && text.charAt(index + 1) === "n") {
+                result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), speed)
+                index += 2;
+                lastBreak = index
+                nextLine();
+            }
+            else if (isBreakCharacter(text.charCodeAt(index))) {
                 lastBreakLocation = index;
             }
 
             if (index - lastBreak === maxLineLength) {
                 if (lastBreakLocation === index || lastBreakLocation < lastBreak) {
-                    script.addLineToCurrentPage(
-                        text.substr(lastBreak, maxLineLength),
-                        speed
-                    );
-                    lastBreak = index + 1;
-                    line++;
+                    result.addLineToCurrentPage(formatLine(text.substr(lastBreak, maxLineLength)), speed);
+                    lastBreak = index;
+                    nextLine();
                 }
                 else {
-                    script.addLineToCurrentPage(
-                        text.substr(lastBreak, lastBreakLocation - lastBreak),
-                        speed
-                    );
-                    lastBreak = lastBreakLocation + 1;
-                    line++;
+                    result.addLineToCurrentPage(formatLine(text.substr(lastBreak, lastBreakLocation - lastBreak)), speed);
+                    lastBreak = lastBreakLocation;
+                    nextLine();
                 }
             }
 
             if (line >= maxLinesPerPage) {
                 line = 0;
-                script.newPage();
+                result.newPage();
             }
         }
 
-        script.addLineToCurrentPage(
-            text.substr(lastBreak, text.length - lastBreak),
-            speed
-        );
+        result.addLineToCurrentPage(formatLine(text.substr(lastBreak, text.length - lastBreak)), speed);
 
-        return script;
+        return result;
     }
 
+    function formatLine(text: string) {
+        let i = 0;
+        while (text.charAt(i) === " ") i++;
+        return text.substr(i, text.length);
+    }
 
     //% blockId=story_print_dialog
     //% block="print dialog $text at x $x y $y width $width height $height||with text color $foreground back color $background $speed"
