@@ -35,78 +35,73 @@ namespace story {
         spriteSayScript(sprite, script);
     }
 
-    function isBreakCharacter(charCode: number) {
-        return charCode <= 47 ||
+   function isBreakCharacter(charCode: number) {
+        return charCode <= 32 ||
             (charCode >= 58 && charCode <= 64) ||
             (charCode >= 91 && charCode <= 96) ||
             (charCode >= 123 && charCode <= 126);
     }
 
-
-    function formatText(text: string, speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
-        const script = new Script();
+    function formatText(text: string, textSpeed: TextSpeed, lineLength = 20, linesPerPage = 5,): Script {
+        const result = new Script();
 
         let lastBreakLocation = 0;
         let lastBreak = 0;
         let line = 0;
 
+        function nextLine() {
+            line++;
+        }
+
         for (let index = 0; index < text.length; index++) {
-            if (isBreakCharacter(text.charCodeAt(index))) {
+            if (text.charAt(index) === "\n") {
+                result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), textSpeed);
+                index++;
+                lastBreak = index;
+                nextLine();
+            }
+            // Handle \\n in addition to \n because that's how it gets converted from blocks
+            else if (text.charAt(index) === "\\" && text.charAt(index + 1) === "n") {
+                result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), textSpeed);
+                index += 2;
+                lastBreak = index
+                nextLine();
+            }
+            else if (isBreakCharacter(text.charCodeAt(index))) {
                 lastBreakLocation = index;
             }
 
-            if (index - lastBreak === maxLineLength) {
+            if (index - lastBreak === lineLength) {
                 if (lastBreakLocation === index || lastBreakLocation < lastBreak) {
-                    script.addLineToCurrentPage(
-                        text.substr(lastBreak, maxLineLength),
-                        speed
-                    );
-                    lastBreak = index + 1;
-                    line++;
+                    result.addLineToCurrentPage(formatLine(text.substr(lastBreak, lineLength)), textSpeed);
+                    lastBreak = index;
+                    nextLine();
                 }
                 else {
-                    script.addLineToCurrentPage(
-                        text.substr(lastBreak, lastBreakLocation - lastBreak),
-                        speed
-                    );
-                    lastBreak = lastBreakLocation + 1;
-                    line++;
+                    result.addLineToCurrentPage(formatLine(text.substr(lastBreak, lastBreakLocation - lastBreak)), textSpeed);
+                    lastBreak = lastBreakLocation;
+                    nextLine();
                 }
             }
 
-            if (line >= maxLinesPerPage) {
+            if (line >= linesPerPage) {
                 line = 0;
-                script.newPage();
+                result.newPage();
             }
         }
 
-        script.addLineToCurrentPage(
-            text.substr(lastBreak, text.length - lastBreak),
-            speed
-        );
+        const lastLine = formatLine(text.substr(lastBreak, text.length - lastBreak));
 
-        return script;
+        if (lastLine) {
+            result.addLineToCurrentPage(lastLine, textSpeed);
+        }
+
+        return result;
     }
 
-
-    //% blockId=story_print_dialog
-    //% block="print dialog $text at x $x y $y width $width height $height||with text color $foreground back color $background $speed"
-    //% text.defl=":)"
-    //% foreground.shadow=colorindexpicker
-    //% foreground.defl=15
-    //% background.shadow=colorindexpicker
-    //% background.defl=1
-    //% x.defl=80
-    //% y.defl=90
-    //% width.defl=150
-    //% height.defl=50
-    //% inlineInputMode=inline
-    //% weight=60
-    //% group="Text"
-    export function printDialog(text: string, x: number, y: number, height: number, width: number, foreground = 15, background = 1, speed?: TextSpeed) {
-        const font = image.getFontForText(text);
-        const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed, Math.idiv(width - 8, font.charWidth), Math.idiv(height - 8, font.charHeight));
-        script.setColors(foreground, background);
-        printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true);
+    function formatLine(text: string) {
+        let i = 0;
+        while (text.charAt(i) === " ") i++;
+        return text.substr(i, text.length);
     }
 }
