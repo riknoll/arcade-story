@@ -14,15 +14,12 @@
         "script.ts",
         "sequence.ts",
         "move.ts",
+        "scene.ts",
         "text.ts"
     ],
     "testFiles": [
         "test.ts"
     ],
-    "targetVersions": {
-        "target": "1.2.9",
-        "targetId": "arcade"
-    },
     "supportedTargets": [
         "arcade"
     ],

@@ -80,6 +80,7 @@ namespace story {
         const script = new Script();
         return script;
     }
+
     
     //% blockId=story_create_script_arguments
     //% block="create script $text with text color $foreground back color $background"
