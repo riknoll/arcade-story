@@ -3,5 +3,7 @@
 namespace story {
     export interface Task {
         isDone(): boolean;
+        key?: string;
+        cancel?: () => void;
     }
 }

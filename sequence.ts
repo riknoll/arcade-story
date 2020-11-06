@@ -25,6 +25,12 @@ namespace story {
         shouldAdvance() {
             return !this.activeTasks.some(task => !task.isDone());
         }
+
+        cancelByKey(key: string) {
+            for (const task of this.activeTasks) {
+                if (task.key === key && task.cancel) task.cancel();
+            }
+        }
     }
 
     //% blockId=story_queue_story_part
@@ -40,6 +46,13 @@ namespace story {
         const state = stateStack && stateStack[stateStack.length - 1];
         if (state && state.queue.length) {
             state.trackTask(task);
+        }
+    }
+
+    export function _cancelTask(key: string) {
+        const state = stateStack && stateStack[stateStack.length - 1];
+        if (state && state.queue.length) {
+            state.cancelByKey(key);
         }
     }
 

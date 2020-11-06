@@ -17,12 +17,14 @@ namespace story {
         foregroundColor: number;
         backgroundColor: number;
         pagePauseMillis: number;
+        relativeToCamera: boolean;
 
         constructor(pages?: MessagePage[]) {
             this.pages = pages || [];
             this.foregroundColor = 0xf;
             this.backgroundColor = 0x1;
             this.pagePauseMillis = 1000;
+            this.relativeToCamera = false;
         }
 
         //% blockId=script_add_line
@@ -69,6 +71,15 @@ namespace story {
         setPagePauseLength(pauseMillis: number) {
             this.pagePauseMillis = pauseMillis;
         }
+
+        //% blockId=script_set_relative_to_camera
+        //% block="$this(script) set relative to camera $relativeToCamera"
+        //% weight=5
+        //% blockGap=8
+        //% group="Script"
+        setRelativeToCamera(relativeToCamera: boolean) {
+            this.relativeToCamera = relativeToCamera;
+        }
     }
 
     //% blockId=story_create_script
@@ -113,8 +124,8 @@ namespace story {
     //% inlineInputMode=inline
     //% blockGap=8
     //% group="Script"
-    export function printScript(script: Script, x: number, y: number, z: number, align = false) {
-        const b = new Bubble();
+    export function printScript(script: Script, x: number, y: number, z: number, align = false, relativeToCamera = false) {
+        const b = new Bubble(z, relativeToCamera || script.relativeToCamera);
 
         if (align) {
             b.setAlign(x, y);
@@ -122,7 +133,6 @@ namespace story {
         else {
             b.setAnchor(x, y);
         }
-        b.z = z;
 
         startScript(script, b);
     }

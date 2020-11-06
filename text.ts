@@ -42,30 +42,26 @@ namespace story {
             (charCode >= 123 && charCode <= 126);
     }
 
-    function formatText(text: string, , speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
+    function formatText(text: string, speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
         const result = new Script();
 
         let lastBreakLocation = 0;
         let lastBreak = 0;
         let line = 0;
 
-        function nextLine() {
-            line++;
-        }
-
         for (let index = 0; index < text.length; index++) {
             if (text.charAt(index) === "\n") {
                 result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), speed);
                 index++;
                 lastBreak = index;
-                nextLine();
+                line++;
             }
             // Handle \\n in addition to \n because that's how it gets converted from blocks
             else if (text.charAt(index) === "\\" && text.charAt(index + 1) === "n") {
                 result.addLineToCurrentPage(formatLine(text.substr(lastBreak, index - lastBreak)), speed)
                 index += 2;
                 lastBreak = index
-                nextLine();
+                line++;
             }
             else if (isBreakCharacter(text.charCodeAt(index))) {
                 lastBreakLocation = index;
@@ -75,12 +71,12 @@ namespace story {
                 if (lastBreakLocation === index || lastBreakLocation < lastBreak) {
                     result.addLineToCurrentPage(formatLine(text.substr(lastBreak, maxLineLength)), speed);
                     lastBreak = index;
-                    nextLine();
+                    line++;
                 }
                 else {
                     result.addLineToCurrentPage(formatLine(text.substr(lastBreak, lastBreakLocation - lastBreak)), speed);
                     lastBreak = lastBreakLocation;
-                    nextLine();
+                    line++;
                 }
             }
 
@@ -119,6 +115,6 @@ namespace story {
         const font = image.getFontForText(text);
         const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed, Math.idiv(width - 8, font.charWidth), Math.idiv(height - 8, font.charHeight));
         script.setColors(foreground, background);
-        printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true);
+        printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true, true);
     }
 }

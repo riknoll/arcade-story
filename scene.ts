@@ -3,6 +3,7 @@ namespace story {
     //% block="push scene"
     //% blockGap=8
     //% group="Scene"
+    //% deprecated=1
     export function pushScene() {
         game.pushScene();
     }
@@ -11,6 +12,7 @@ namespace story {
     //% block="pop scene"
     //% blockGap=8
     //% group="Scene"
+    //% deprecated=1
     export function popScene() {
         game.popScene();
     }
@@ -19,6 +21,7 @@ namespace story {
     //% block="clear scene"
     //% blockGap=8
     //% group="Scene"
+    //% deprecated=1
     export function clearScene() {
         popScene();
         pushScene();

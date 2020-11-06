@@ -84,7 +84,7 @@ namespace story {
         protected leftAlign: number;
         protected topAlign: number;
 
-        constructor(z = 1) {
+        constructor(z = 1, protected relativeToCamera = false) {
             super(z);
 
             this.cx = 0;
@@ -142,7 +142,7 @@ namespace story {
                 left = this.leftAlign + this.padding;
             }
             else {
-                left = this.cx - (width >> 1) - camera.drawOffsetX
+                left = this.cx - (width >> 1) - (this.relativeToCamera ? 0 : camera.drawOffsetX)
 
                 if (left + width > screen.width) {
                     left = screen.width - width;
@@ -156,7 +156,7 @@ namespace story {
                 top = this.topAlign + this.padding;
             }
             else {
-                top = this.cy - (height >> 1) - camera.drawOffsetY
+                top = this.cy - (height >> 1) - (this.relativeToCamera ? 0 : camera.drawOffsetY)
                 if (lines.length > 1) {
                     for (i = 0; i < lines.length - 1; i++) {
                         top -= lines[i].height >> 1;
