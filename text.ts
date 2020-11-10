@@ -12,7 +12,7 @@ namespace story {
     //% weight=99
     //% group="Text"
     export function printText(text: string, x: number, y: number, foreground = 15, background = 1, speed?: TextSpeed) {
-        const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed);
+        const script = _formatText(text, speed === undefined ? TextSpeed.Normal : speed);
         script.setColors(foreground, background);
         printScript(script, x, y, TEXT_Z);
     }
@@ -30,7 +30,7 @@ namespace story {
     //% weight=99
     //% group="Text"
     export function spriteSayText(sprite: Sprite, text: string, foreground = 15, background = 1, speed?: TextSpeed) {
-        const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed);
+        const script = _formatText(text, speed === undefined ? TextSpeed.Normal : speed);
         script.setColors(foreground, background);
         spriteSayScript(sprite, script);
     }
@@ -42,7 +42,7 @@ namespace story {
             (charCode >= 123 && charCode <= 126);
     }
 
-    function formatText(text: string, speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
+    export function _formatText(text: string, speed: TextSpeed, maxLineLength = 20, maxLinesPerPage = 5): Script {
         const result = new Script();
 
         let lastBreakLocation = 0;
@@ -113,7 +113,7 @@ namespace story {
     //% group="Text"
     export function printDialog(text: string, x: number, y: number, height: number, width: number, foreground = 15, background = 1, speed?: TextSpeed) {
         const font = image.getFontForText(text);
-        const script = formatText(text, speed === undefined ? TextSpeed.Normal : speed, Math.idiv(width - 8, font.charWidth), Math.idiv(height - 8, font.charHeight));
+        const script = _formatText(text, speed === undefined ? TextSpeed.Normal : speed, Math.idiv(width - 8, font.charWidth), Math.idiv(height - 8, font.charHeight));
         script.setColors(foreground, background);
         printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true, true);
     }

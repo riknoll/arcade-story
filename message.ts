@@ -110,6 +110,11 @@ namespace story {
             return this.state === BubbleState.Stopped;
         }
 
+        cancel() {
+            this.destroy();
+            this.state = BubbleState.Stopped;
+        }
+
         setAlign(left: number, top: number) {
             this.leftAlign = left;
             this.topAlign = top;
@@ -171,7 +176,9 @@ namespace story {
                 }
             }
 
-            screen.fillRect(left, top, width, height, this.backgroundColor);
+            if (this.backgroundColor) {
+                screen.fillRect(left, top, width, height, this.backgroundColor);
+            }
 
             top += this.padding
 

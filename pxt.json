@@ -15,7 +15,11 @@
         "sequence.ts",
         "move.ts",
         "scene.ts",
-        "text.ts"
+        "text.ts",
+        "dialog.ts",
+        "shapeSprites.ts",
+        "menu.ts",
+        "menuState.ts"
     ],
     "testFiles": [
         "test.ts"
