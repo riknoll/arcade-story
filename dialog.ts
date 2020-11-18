@@ -1,4 +1,4 @@
-namespace conversation {
+namespace story {
     let stateStack: ConversationState[];
 
     enum State {
@@ -111,6 +111,7 @@ namespace conversation {
     //% block="start conversation"
     //% weight=100
     //% handlerStatement=1
+    //% group="Conversation"
     export function startConveration(callback: () => void) {
         cancelCurrentConversation();
 
@@ -134,6 +135,7 @@ namespace conversation {
     //% blockId=arcade_story_print_character_text
     //% block="print character text $text|| with label $label"
     //% weight=90
+    //% group="Conversation"
     export function printCharacterText(text: string, label?: string) {
         if (currentConversation().cancelled) {
             return;
@@ -164,6 +166,7 @@ namespace conversation {
     //% block="show player choices $choice1 $choice2 ||$choice3 $choice4 $choice5"
     //% inlineInputMode=inline
     //% weight=80
+    //% group="Conversation"
     export function showPlayerChoices(choice1: string, choice2: string, choice3?: string, choice4?: string, choice5?: string) {
         const choices = [choice1, choice2];
         if (choice3) choices.push(choice3);
@@ -175,6 +178,7 @@ namespace conversation {
     //% blockId=arcade_story_last_answer
     //% block="last answer equals $choice"
     //% weight=70
+    //% group="Conversation"
     export function checkLastAnswer(choice: string): boolean {
         return currentConversation().lastAnswer === choice;
     }
@@ -182,6 +186,7 @@ namespace conversation {
     //% blockId=arcade_story_cancel_conversation
     //% block="cancel conversation"
     //% weight=60
+    //% group="Conversation"
     export function cancelCurrentConversation() {
         currentConversation().cancel();
     }
