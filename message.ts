@@ -112,7 +112,6 @@ namespace story {
 
         cancel() {
             this.destroy();
-            this.state = BubbleState.Stopped;
         }
 
         setAlign(left: number, top: number) {
@@ -241,6 +240,7 @@ namespace story {
 
         destroy() {
             game.currentScene().allSprites.removeElement(this);
+            this.stop();
         }
 
         protected updateCore(dtMillis: number) {

@@ -31,6 +31,15 @@ namespace story {
                 if (task.key === key && task.cancel) task.cancel();
             }
         }
+
+        clear() {
+            this.queue = [];
+            for (const task of this.activeTasks) {
+                if (task.cancel)
+                    task.cancel();
+            }
+            this.reset();
+        }
     }
 
     //% blockId=story_queue_story_part
@@ -40,6 +49,14 @@ namespace story {
     export function queueStoryPart(cb: () => void) {
         init();
         stateStack[stateStack.length - 1].queue.push(cb);
+    }
+
+    //% blockId=story_clear_story_parts
+    //% block="clear queued story parts"
+    //% group="Scene"
+    export function clearQueuedStoryParts() {
+        init();
+        stateStack[stateStack.length - 1].clear();
     }
 
     export function _trackTask(task: Task) {

@@ -22,6 +22,9 @@ namespace story {
 
         destroy() {
             game.currentScene().allSprites.removeElement(this);
+            if (this.parent && !this.parent.isDone()) {
+                if (this.parent.cancel) this.parent.cancel();
+            }
         }
 
         __drawCore(camera: scene.Camera) {
