@@ -34,6 +34,10 @@ namespace story {
 
         clear() {
             this.queue = [];
+            for (const task of this.activeTasks) {
+                if (task.cancel)
+                    task.cancel();
+            }
             this.reset();
         }
     }
