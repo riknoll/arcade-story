@@ -64,6 +64,7 @@ namespace story {
         protected cy: number;
 
         public pagePauseLength = 1000;
+        public finalPagePauseLength = 1000;
         public foregroundColor = 15;
         public backgroundColor = 1;
 
@@ -323,7 +324,12 @@ namespace story {
             }
             else {
                 this.state = BubbleState.Paused;
-                this.timer += this.pagePauseLength;
+                if (this.pageIndex == this.pages.length - 1) {
+                    this.timer += this.finalPagePauseLength
+                }
+                else {
+                    this.timer += this.pagePauseLength;
+                }
             }
         }
 

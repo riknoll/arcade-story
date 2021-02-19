@@ -26,7 +26,12 @@ namespace story {
             scene._followPath(sprite, path, speed, () => {
                 done = true;
             });
+
             _trackTask(task);
+            if (!_isInQueueStoryPart()) {
+                _currentCutscene().currentTask = task;
+                _pauseUntilTaskIsComplete(task);
+            }
         }
         else if (location) {
             spriteMoveToLocation(sprite, location.x, location.y, speed);
@@ -76,6 +81,10 @@ namespace story {
         };
 
         _trackTask(task);
+        if (!_isInQueueStoryPart()) {
+            _currentCutscene().currentTask = task;
+            _pauseUntilTaskIsComplete(task);
+        }
     }
 
     //% blockId=story_sprite_cancel_movement

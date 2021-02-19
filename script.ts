@@ -12,18 +12,23 @@ namespace story {
         VeryFast = 20
     }
 
+    export let _defaultPagePauseLength = 1000;
+    export let _defaultFinalPagePauseLength = 1000;
+
     export class Script {
         pages: MessagePage[];
         foregroundColor: number;
         backgroundColor: number;
         pagePauseMillis: number;
+        finalPagePauseLength: number;
         relativeToCamera: boolean;
 
         constructor(pages?: MessagePage[]) {
             this.pages = pages || [];
             this.foregroundColor = 0xf;
             this.backgroundColor = 0x1;
-            this.pagePauseMillis = 1000;
+            this.pagePauseMillis = _defaultPagePauseLength;
+            this.finalPagePauseLength = _defaultFinalPagePauseLength;
             this.relativeToCamera = false;
         }
 
@@ -166,12 +171,11 @@ namespace story {
         bubble.foregroundColor = script.foregroundColor;
         bubble.backgroundColor = script.backgroundColor;
         bubble.pagePauseLength = script.pagePauseMillis;
+        bubble.finalPagePauseLength = script.finalPagePauseLength;
         bubble.startMessage(script.pages);
 
-        if (_isInQueueStoryPart()) {
-            _trackTask(bubble);
-        }
-        else {
+        _trackTask(bubble);
+        if (!_isInQueueStoryPart()) {
             _currentCutscene().currentTask = bubble;
             _pauseUntilTaskIsComplete(bubble);
         }

@@ -13,8 +13,7 @@ namespace story {
         }
 
         trackTask(task: Task) {
-            if (this.queue.length)
-                this.activeTasks.push(task);
+            this.activeTasks.push(task);
         }
 
         reset() {
@@ -28,7 +27,10 @@ namespace story {
 
         cancelByKey(key: string) {
             for (const task of this.activeTasks) {
-                if (task.key === key && task.cancel) task.cancel();
+                if (task.key === key && task.cancel) {
+                    task.cancel();
+                    return;
+                }
             }
         }
 
@@ -39,6 +41,12 @@ namespace story {
                     task.cancel();
             }
             this.reset();
+        }
+
+        clearFinishedTasks() {
+            if (this.activeTasks.some(task => task.isDone())) {
+                this.activeTasks = this.activeTasks.filter(task => !task.isDone());
+            }
         }
     }
 
@@ -62,15 +70,16 @@ namespace story {
     }
 
     export function _trackTask(task: Task) {
+        init();
         const state = stateStack && stateStack[stateStack.length - 1];
-        if (state && state.queue.length) {
+        if (state) {
             state.trackTask(task);
         }
     }
 
     export function _cancelTask(key: string) {
         const state = stateStack && stateStack[stateStack.length - 1];
-        if (state && state.queue.length) {
+        if (state) {
             state.cancelByKey(key);
         }
     }
@@ -104,7 +113,9 @@ namespace story {
 
         game.onUpdate(function() {
             const state = stateStack[stateStack.length - 1];
+            state.clearFinishedTasks();
             if (state.lock) return;
+            
             if (state.queue.length) {
                 if (state.shouldAdvance() || !state.running) {
                     if (state.running) {

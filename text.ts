@@ -120,4 +120,19 @@ namespace story {
         script.setColors(foreground, background);
         printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true, true);
     }
+
+    //% blockId=story_set_page_pause_length
+    //% block="set page pause (ms) $pagePauseMillis and final page pause (ms) $finalPagePauseMillis"
+    //% pagePauseMillis.shadow=timePicker
+    //% pagePauseMillis.defl=1000
+    //% finalPagePauseMillis.shadow=timePicker
+    //% finalPagePauseMillis.defl=1000
+    //% inlineInputMode=inline
+    //% blockGap=8
+    //% weight=40
+    //% group="Text"
+    export function setPagePauseLength(pagePauseMillis: number, finalPagePauseMillis: number) {
+        _defaultPagePauseLength = pagePauseMillis;
+        _defaultFinalPagePauseLength = finalPagePauseMillis;
+    }
 }
