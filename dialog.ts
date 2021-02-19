@@ -107,16 +107,16 @@ namespace story {
         }
     }
 
-    //% blockId=arcade_story_start_conversation
-    //% block="start conversation"
+    //% blockId=arcade_story_start_cutscene
+    //% block="start cutscene"
     //% weight=100
     //% handlerStatement=1
-    //% group="Conversation"
-    export function startConveration(callback: () => void) {
+    //% group="Cutscene"
+    export function startCutscene(callback: () => void) {
         cancelCurrentConversation();
 
         control.runInParallel(() => {
-            let state = currentConversation();
+            let state = _currentCutscene();
             if (state.cancelled) {
                 state.cancelled = false;
                 state.state = State.Idle;
@@ -124,20 +124,31 @@ namespace story {
 
             callback();
             
-            state = currentConversation();
+            state = _currentCutscene();
             if (state.cancelled) {
                 state.cancelled = false;
                 state.state = State.Idle;
             }
         });
     }
+
+    //% blockId=arcade_story_start_conversation
+    //% block="start conversation"
+    //% weight=100
+    //% handlerStatement=1
+    //% group="Cutscene"
+    //% deprecated=1
+    export function startConveration(callback: () => void) {
+        startCutscene(callback);
+    }
     
     //% blockId=arcade_story_print_character_text
     //% block="print character text $text|| with label $label"
     //% weight=90
-    //% group="Conversation"
+    //% group="Cutscene"
+    //% blockGap=8
     export function printCharacterText(text: string, label?: string) {
-        if (currentConversation().cancelled) {
+        if (_currentCutscene().cancelled) {
             return;
         }
         const task = printDialog(text, 80, 90, 50, 150);
@@ -158,37 +169,49 @@ namespace story {
             labelBackdrop.attachToTask(task);
         }
 
-        currentConversation().currentTask = task;
-        pauseUntilTaskIsComplete(task);
+        _currentCutscene().currentTask = task;
+        _pauseUntilTaskIsComplete(task);
     }
 
     //% blockId=arcade_story_show_player_choices
     //% block="show player choices $choice1 $choice2 ||$choice3 $choice4 $choice5"
     //% inlineInputMode=inline
     //% weight=80
-    //% group="Conversation"
+    //% blockGap=8
+    //% group="Cutscene"
     export function showPlayerChoices(choice1: string, choice2: string, choice3?: string, choice4?: string, choice5?: string) {
-        const choices = [choice1, choice2];
+        const choices = [choice1];
+        if (choice2) choices.push(choice2);
         if (choice3) choices.push(choice3);
         if (choice4) choices.push(choice4);
 
-        currentConversation().showMenu(choices);
+        _currentCutscene().showMenu(choices);
     }
 
     //% blockId=arcade_story_last_answer
     //% block="last answer equals $choice"
     //% weight=70
-    //% group="Conversation"
+    //% group="Cutscene"
     export function checkLastAnswer(choice: string): boolean {
-        return currentConversation().lastAnswer === choice;
+        return _currentCutscene().lastAnswer === choice;
     }
 
     //% blockId=arcade_story_cancel_conversation
     //% block="cancel conversation"
     //% weight=60
-    //% group="Conversation"
+    //% deprecated=1
+    //% group="Cutscene"
     export function cancelCurrentConversation() {
-        currentConversation().cancel();
+        cancelCurrentCutscene();
+    }
+
+    //% blockId=arcade_story_cancel_cutscene
+    //% block="cancel cutscene"
+    //% weight=60
+    //% blockGap=8
+    //% group="Cutscene"
+    export function cancelCurrentCutscene() {
+        _currentCutscene().cancel();
     }
 
     function printDialog(text: string, x: number, y: number, height: number, width: number, foreground = 15, background = 1, speed?: story.TextSpeed) {
@@ -216,12 +239,12 @@ namespace story {
         return bubble;
     }
 
-    function pauseUntilTaskIsComplete(task: story.Task) {
-        const state = currentConversation();
+    export function _pauseUntilTaskIsComplete(task: story.Task) {
+        const state = _currentCutscene();
         pauseUntil(() => task.isDone() || state.cancelled);
     }
 
-    function currentConversation() {
+    export function _currentCutscene() {
         if (!stateStack) {
             stateStack = [];
 

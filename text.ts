@@ -9,6 +9,7 @@ namespace story {
     //% background.shadow=colorindexpicker
     //% background.defl=1
     //% inlineInputMode=inline
+    //% blockGap=8
     //% weight=99
     //% group="Text"
     export function printText(text: string, x: number, y: number, foreground = 15, background = 1, speed?: TextSpeed) {
@@ -27,7 +28,8 @@ namespace story {
     //% background.shadow=colorindexpicker
     //% background.defl=1
     //% inlineInputMode=inline
-    //% weight=99
+    //% blockGap=8
+    //% weight=98
     //% group="Text"
     export function spriteSayText(sprite: Sprite, text: string, foreground = 15, background = 1, speed?: TextSpeed) {
         const script = _formatText(text, speed === undefined ? TextSpeed.Normal : speed);
@@ -98,7 +100,7 @@ namespace story {
     }
 
     //% blockId=story_print_dialog
-    //% block="print dialog $text at x $x y $y width $width height $height||with text color $foreground back color $background $speed"
+    //% block="print $text at camera x $x y $y in box width $width height $height||with text color $foreground back color $background $speed"
     //% text.defl=":)"
     //% foreground.shadow=colorindexpicker
     //% foreground.defl=15
@@ -109,6 +111,7 @@ namespace story {
     //% width.defl=150
     //% height.defl=50
     //% inlineInputMode=inline
+    //% blockGap=8
     //% weight=60
     //% group="Text"
     export function printDialog(text: string, x: number, y: number, height: number, width: number, foreground = 15, background = 1, speed?: TextSpeed) {

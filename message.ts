@@ -19,6 +19,8 @@ namespace story {
         }
     }
 
+    const maxPanDistance = 30;
+
     export class MessageLine {
         public readonly parts: MessagePart[];
         public readonly width: number;
@@ -149,10 +151,20 @@ namespace story {
                 left = this.cx - (width >> 1) - (this.relativeToCamera ? 0 : camera.drawOffsetX)
 
                 if (left + width > screen.width) {
-                    left = screen.width - width;
+                    if (left + width - screen.width > maxPanDistance) {
+                        left -= maxPanDistance
+                    }
+                    else {
+                        left = screen.width - width;
+                    }
                 }
                 else if (left < 0) {
-                    left = 0
+                    if (left < -maxPanDistance) {
+                        left += maxPanDistance;
+                    }
+                    else {
+                        left = 0
+                    }
                 }
             }
 
@@ -161,6 +173,7 @@ namespace story {
             }
             else {
                 top = this.cy - (height >> 1) - (this.relativeToCamera ? 0 : camera.drawOffsetY)
+
                 if (lines.length > 1) {
                     for (i = 0; i < lines.length - 1; i++) {
                         top -= lines[i].height >> 1;
@@ -168,11 +181,25 @@ namespace story {
                 }
 
                 if (top + height > screen.height) {
-                    top = screen.height - height;
+                    if (top + height - screen.height > maxPanDistance) {
+                        top -= maxPanDistance;
+                    }
+                    else {
+                        top = screen.height - height;
+                    }
                 }
                 else if (top < 0) {
-                    top = 0
+                    if (top < -maxPanDistance) {
+                        top += maxPanDistance
+                    }
+                    else {
+                        top = 0
+                    }
                 }
+            }
+
+            if (top > screen.height || top + height < 0 || left > screen.width || left + width < 0) {
+                return;
             }
 
             if (this.backgroundColor) {

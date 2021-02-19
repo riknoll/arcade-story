@@ -28,8 +28,8 @@ namespace story {
     }
 
     //% blockId="story_clear_all_text"
-    //% block="clear all text"
-    //% group="Scene"
+    //% block="cancel current text"
+    //% group="Cutscene"
     export function clearAllText() {
         for (const bubble of getAllBubbles()) {
             bubble.destroy();

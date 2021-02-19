@@ -32,6 +32,7 @@ namespace story {
         //% weight=90
         //% blockGap=8
         //% group="Script"
+        //% deprecated=1
         addLineToCurrentPage(text: string, speed: TextSpeed) {
             if (!this.pages.length) {
                 this.pages.push(new MessagePage([]));
@@ -44,6 +45,7 @@ namespace story {
         //% weight=80
         //% blockGap=8
         //% group="Script"
+        //% deprecated=1
         newPage() {
             this.pages.push(new MessagePage([]));
         }
@@ -57,6 +59,7 @@ namespace story {
         //% weight=70
         //% blockGap=8
         //% group="Script"
+        //% deprecated=1
         setColors(foreground: number, background: number) {
             this.foregroundColor = foreground;
             this.backgroundColor = background;
@@ -68,6 +71,7 @@ namespace story {
         //% pauseMillis.defl=1000
         //% weight=60
         //% group="Script"
+        //% deprecated=1
         setPagePauseLength(pauseMillis: number) {
             this.pagePauseMillis = pauseMillis;
         }
@@ -77,6 +81,7 @@ namespace story {
         //% weight=5
         //% blockGap=8
         //% group="Script"
+        //% deprecated=1
         setRelativeToCamera(relativeToCamera: boolean) {
             this.relativeToCamera = relativeToCamera;
         }
@@ -87,6 +92,7 @@ namespace story {
     //% blockSetVariable=script
     //% weight=98
     //% group="Script"
+    //% deprecated=1
     export function createEmptyScript(): Script {
         const script = new Script();
         return script;
@@ -103,6 +109,7 @@ namespace story {
     //% blockSetVariable=script
     //% weight=99
     //% group="Script"
+    //% deprecated=1
     export function createScript(text: string, foreground: number, background: number): Script {
         const script = new Script();
         
@@ -124,6 +131,7 @@ namespace story {
     //% inlineInputMode=inline
     //% blockGap=8
     //% group="Script"
+    //% deprecated=1
     export function printScript(script: Script, x: number, y: number, z: number, align = false, relativeToCamera = false) {
         const b = new Bubble(z, relativeToCamera || script.relativeToCamera);
 
@@ -145,6 +153,7 @@ namespace story {
     //% script.defl=script
     //% weight=40
     //% group="Script"
+    //% deprecated=1
     export function spriteSayScript(sprite: Sprite, script: Script) {
         const b = new Bubble();
         b.setAnchorSprite(sprite);
@@ -158,6 +167,13 @@ namespace story {
         bubble.backgroundColor = script.backgroundColor;
         bubble.pagePauseLength = script.pagePauseMillis;
         bubble.startMessage(script.pages);
-        _trackTask(bubble);
+
+        if (_isInQueueStoryPart()) {
+            _trackTask(bubble);
+        }
+        else {
+            _currentCutscene().currentTask = bubble;
+            _pauseUntilTaskIsComplete(bubble);
+        }
     }
 }

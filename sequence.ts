@@ -46,6 +46,7 @@ namespace story {
     //% block="queue story part"
     //% group="Sequence"
     //% handlerStatement=1
+    //% deprecated=1
     export function queueStoryPart(cb: () => void) {
         init();
         stateStack[stateStack.length - 1].queue.push(cb);
@@ -54,6 +55,7 @@ namespace story {
     //% blockId=story_clear_story_parts
     //% block="clear queued story parts"
     //% group="Scene"
+    //% deprecated=1
     export function clearQueuedStoryParts() {
         init();
         stateStack[stateStack.length - 1].clear();
@@ -71,6 +73,14 @@ namespace story {
         if (state && state.queue.length) {
             state.cancelByKey(key);
         }
+    }
+
+    export function _isInQueueStoryPart() {
+        if (stateStack && stateStack.length) {
+            const state = stateStack[stateStack.length - 1]
+            return state.lock;
+        }
+        return false;
     }
 
     function init() {
