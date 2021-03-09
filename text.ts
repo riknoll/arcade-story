@@ -1,8 +1,19 @@
 namespace story {
     export const TEXT_Z = scene.HUD_Z - 1;
 
+    /**
+     * Prints some text to the screen one character at a time.
+     *
+     * @param text The text to print to the screen
+     * @param x The center x position to print the text at
+     * @param y The center y position to print the text at
+     * @param foreground The color used to print the text
+     * @param background The color of the background behind the printed text
+     * @param speed The speed at which to print the text
+     */
     //% blockId=story_show_text
     //% block="print $text at x $x y $y||with text color $foreground back color $background $speed"
+    //% help="github:arcade-story/docs/print-text.md"
     //% text.defl=":)"
     //% foreground.shadow=colorindexpicker
     //% foreground.defl=15
@@ -18,8 +29,18 @@ namespace story {
         printScript(script, x, y, TEXT_Z);
     }
 
+    /**
+     * Prints some text to the screen above a sprite one character at a time.
+     *
+     * @param sprite The sprite to print above
+     * @param text The text to print to the screen
+     * @param foreground The color used to print the text
+     * @param background the color of the background behind the printed text
+     * @param speed the speed at which to print the text
+     */
     //% blockId=story_sprite_say_text
     //% block="$sprite say $text ||with text color $foreground back color $background $speed"
+    //% help="github:arcade-story/docs/sprite-say.md"
     //% text.defl=":)"
     //% sprite.shadow=variables_get
     //% sprite.defl=sprite
@@ -99,8 +120,21 @@ namespace story {
         return text.substr(i, text.length);
     }
 
+    /**
+     * Print some text to the screen within a given box, relative to the camera, and character by character.
+     *
+     * @param text The text to print to the screen
+     * @param x The center x position to print the text at
+     * @param y The center y position to print the text at
+     * @param height The height of the invisible box to print within
+     * @param width The width of the invisible box to print within
+     * @param foreground The color used to print the text
+     * @param background The color of the background behind the printed text
+     * @param speed The speed at which to print the text
+     */
     //% blockId=story_print_dialog
     //% block="print $text at camera x $x y $y in box width $width height $height||with text color $foreground back color $background $speed"
+    //% help="github:arcade-story/docs/print-dialog.md"
     //% text.defl=":)"
     //% foreground.shadow=colorindexpicker
     //% foreground.defl=15
@@ -121,8 +155,16 @@ namespace story {
         printScript(script, x - (width >> 1), y - (height >> 1), TEXT_Z, true, true);
     }
 
+    /**
+     * Sets the amount of time to pause in between pages of text that are printed out by
+     * the story extension.
+     *
+     * @param pagePauseMillis The time to pause at the end of pages in milliseconds
+     * @param finalPagePauseMillis The time to pause at the end of the final page in milliseconds
+     */
     //% blockId=story_set_page_pause_length
     //% block="set page pause (ms) $pagePauseMillis and final page pause (ms) $finalPagePauseMillis"
+    //% help="github:arcade-story/docs/set-page-pause-length.md"
     //% pagePauseMillis.shadow=timePicker
     //% pagePauseMillis.defl=1000
     //% finalPagePauseMillis.shadow=timePicker

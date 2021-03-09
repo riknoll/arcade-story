@@ -27,8 +27,12 @@ namespace story {
         pushScene();
     }
 
+    /**
+     * Cancels all text from the story extension that is currently visible on the screen.
+     */
     //% blockId="story_clear_all_text"
     //% block="cancel current text"
+    //% help="github:arcade-story/docs/cancel-current-text.md"
     //% group="Cutscene"
     export function clearAllText() {
         for (const bubble of getAllBubbles()) {
@@ -42,7 +46,7 @@ namespace story {
         for (const sprite of game.currentScene().allSprites) {
             if (sprite instanceof Bubble) {
                 all.push(sprite);
-            } 
+            }
         }
 
         return all;
