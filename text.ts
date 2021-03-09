@@ -177,4 +177,21 @@ namespace story {
         _defaultPagePauseLength = pagePauseMillis;
         _defaultFinalPagePauseLength = finalPagePauseMillis;
     }
+
+    /**
+     * Sets whether or not a sound will play whenever a character is printed
+     * to the screen.
+     * 
+     * @param enabled Whether or not the sound should play
+     */
+    //% blockId=story_set_sound_enabled
+    //% block="set text sound enabled $enabled"
+    //% help="github:arcade-story/docs/set-sound-enabled.md"
+    //% inlineInputMode=inline
+    //% blockGap=8
+    //% weight=30
+    //% group="Text"
+    export function setSoundEnabled(enabled: boolean) {
+        _currentCutscene().soundEnabled = enabled;
+    }
 }

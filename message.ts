@@ -367,6 +367,7 @@ namespace story {
     }
 
     function playWithVolume(sound: music.Melody, volume: number) {
+        if (!_currentCutscene().soundEnabled) return;
         const current = music.volume();
         music.setVolume(Math.min(current, volume));
         sound.play();
