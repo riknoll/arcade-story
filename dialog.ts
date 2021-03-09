@@ -29,30 +29,30 @@ namespace story {
             }
 
             let arrows = img`
-                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
-                1 1 1 1 1 1 1 1 1 6 6 6 6 6 6 6 1 
-                1 1 1 1 6 1 1 1 1 6 6 6 6 6 6 6 1 
-                1 1 1 1 6 1 1 1 1 1 6 6 6 6 6 1 1 
-                1 1 1 6 6 6 1 1 1 1 6 6 6 6 6 1 1 
-                1 1 1 6 6 6 1 1 1 1 1 6 6 6 1 1 1 
-                1 1 6 6 6 6 6 1 1 1 1 6 6 6 1 1 1 
-                1 1 6 6 6 6 6 1 1 1 1 1 6 1 1 1 1 
-                1 6 6 6 6 6 6 6 1 1 1 1 6 1 1 1 1 
-                1 6 6 6 6 6 6 6 1 1 1 1 1 1 1 1 1 
-                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                1 1 1 1 1 1 1 1 1 6 6 6 6 6 6 6 1
+                1 1 1 1 6 1 1 1 1 6 6 6 6 6 6 6 1
+                1 1 1 1 6 1 1 1 1 1 6 6 6 6 6 1 1
+                1 1 1 6 6 6 1 1 1 1 6 6 6 6 6 1 1
+                1 1 1 6 6 6 1 1 1 1 1 6 6 6 1 1 1
+                1 1 6 6 6 6 6 1 1 1 1 6 6 6 1 1 1
+                1 1 6 6 6 6 6 1 1 1 1 1 6 1 1 1 1
+                1 6 6 6 6 6 6 6 1 1 1 1 6 1 1 1 1
+                1 6 6 6 6 6 6 6 1 1 1 1 1 1 1 1 1
+                1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
             `
             let abutton = img`
-                1 1 1 1 1 1 1 1 1 1 1 
-                1 1 1 6 6 6 6 6 1 1 1 
-                1 1 6 6 6 6 6 6 6 1 1 
-                1 6 6 6 6 1 6 6 6 6 1 
-                1 6 6 6 1 6 1 6 6 6 1 
-                1 6 6 6 1 1 1 6 6 6 1 
-                1 6 6 6 1 6 1 6 6 6 1 
-                1 6 6 6 1 6 1 6 6 6 1 
-                1 1 6 6 6 6 6 6 6 1 1 
-                1 1 1 6 6 6 6 6 1 1 1 
-                1 1 1 1 1 1 1 1 1 1 1 
+                1 1 1 1 1 1 1 1 1 1 1
+                1 1 1 6 6 6 6 6 1 1 1
+                1 1 6 6 6 6 6 6 6 1 1
+                1 6 6 6 6 1 6 6 6 6 1
+                1 6 6 6 1 6 1 6 6 6 1
+                1 6 6 6 1 1 1 6 6 6 1
+                1 6 6 6 1 6 1 6 6 6 1
+                1 6 6 6 1 6 1 6 6 6 1
+                1 1 6 6 6 6 6 6 6 1 1
+                1 1 1 6 6 6 6 6 1 1 1
+                1 1 1 1 1 1 1 1 1 1 1
             `
 
             const arrowText = new story.TextSprite(story.TEXT_Z + 1);
@@ -74,7 +74,7 @@ namespace story {
             buttonIcon.setIcon(abutton);
 
             const totalWidth = arrowText.getWidth() + buttonText.getWidth() + arrows.width + abutton.width + 4;
-            
+
             arrowIcon.left = (screen.width >> 1) - (totalWidth >> 1);
             arrowText.left = arrowIcon.left + arrows.width + 1
             buttonIcon.left = arrowText.left + arrowText.getWidth() + 2;
@@ -107,8 +107,16 @@ namespace story {
         }
     }
 
+    /**
+     * Starts a cutscene that runs in the background. There can only
+     * be one cutscene active at a time and calling this will cancel any
+     * other cutscene that is currently running.
+     *
+     * @param callback The code to run inside the cutscene
+     */
     //% blockId=arcade_story_start_cutscene
     //% block="start cutscene"
+    //% help="github:arcade-story/docs/start-cutscene.md"
     //% weight=100
     //% handlerStatement=1
     //% group="Cutscene"
@@ -123,7 +131,7 @@ namespace story {
             }
 
             callback();
-            
+
             state = _currentCutscene();
             if (state.cancelled) {
                 state.cancelled = false;
@@ -141,9 +149,18 @@ namespace story {
     export function startConveration(callback: () => void) {
         startCutscene(callback);
     }
-    
+
+    /**
+     * Prints text out to the bottom half of the screen, one character at a time.
+     * The text is printed on top of white background and this block will pause
+     * until the printing is complete.
+     *
+     * @param text The text to print
+     * @param label An optional label to display above the text
+     */
     //% blockId=arcade_story_print_character_text
     //% block="print character text $text|| with label $label"
+    //% help="github:arcade-story/docs/print-character-text.md"
     //% weight=90
     //% group="Cutscene"
     //% blockGap=8
@@ -173,8 +190,21 @@ namespace story {
         _pauseUntilTaskIsComplete(task);
     }
 
+    /**
+     * Shows a menu of choices for the player to make and pauses until the player
+     * makes a choice. The menu shown to the player uses the up, down, and A buttons,
+     * so make sure you ignore those button presses while the menu is open.
+     *
+     *
+     * @param choice1 A choice to appear in the list of player choices
+     * @param choice2 A choice to appear in the list of player choices
+     * @param choice3 A choice to appear in the list of player choices
+     * @param choice4 A choice to appear in the list of player choices
+     * @param choice5 A choice to appear in the list of player choices
+     */
     //% blockId=arcade_story_show_player_choices
     //% block="show player choices $choice1 $choice2 ||$choice3 $choice4 $choice5"
+    //% help="github:arcade-story/docs/show-player-choices.md"
     //% inlineInputMode=inline
     //% weight=80
     //% blockGap=8
@@ -188,8 +218,15 @@ namespace story {
         _currentCutscene().showMenu(choices);
     }
 
+    /**
+     * Checks the last choice made by the player in a menu created by "show player choices".
+     *
+     * @param choice The text to check against the last choice made
+     * @returns True if the choice matches the last answer and false otherwise
+     */
     //% blockId=arcade_story_last_answer
     //% block="last answer equals $choice"
+    //% help="github:arcade-story/docs/last-answer-equals.md"
     //% weight=70
     //% group="Cutscene"
     export function checkLastAnswer(choice: string): boolean {
@@ -205,8 +242,12 @@ namespace story {
         cancelCurrentCutscene();
     }
 
+    /**
+     * Cancels the currently active cutscene.
+     */
     //% blockId=arcade_story_cancel_cutscene
     //% block="cancel cutscene"
+    //% help="github:arcade-story/docs/cancel-cutscene.md"
     //% weight=60
     //% blockGap=8
     //% group="Cutscene"
@@ -260,7 +301,7 @@ namespace story {
             });
         }
         if (!stateStack.length) {
-            stateStack.push(new ConversationState());    
+            stateStack.push(new ConversationState());
         }
         return stateStack[stateStack.length - 1];
     }

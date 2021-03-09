@@ -19,7 +19,20 @@
         "dialog.ts",
         "shapeSprites.ts",
         "menu.ts",
-        "menuState.ts"
+        "menuState.ts",
+        "docs/cancel-current-text.md",
+        "docs/cancel-cutscene",
+        "docs/last-answer-equals.md",
+        "docs/print-character-text.md",
+        "docs/print-dialog.md",
+        "docs/print-text.md",
+        "docs/set-page-pause-length.md",
+        "docs/show-player-choices.md",
+        "docs/sprite-cancel-movement.md",
+        "docs/sprite-move-to-position.md",
+        "docs/sprite-move-to-tilemap-location.md",
+        "docs/sprite-say.md",
+        "docs/start-cutscene.md"
     ],
     "testFiles": [
         "test.ts"
